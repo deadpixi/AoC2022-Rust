@@ -90,6 +90,7 @@ impl Move {
 fn problem1(file: File) -> io::Result<()> {
     let mut score = 0usize;
 
+	// The filter_map removes invalid lines.
     for line in io::BufReader::new(file).lines() {
         if let [op, me] = line?
             .trim()
@@ -110,6 +111,8 @@ fn problem2(file: File) -> io::Result<()> {
     let mut score = 0usize;
 
     for line in io::BufReader::new(file).lines() {
+		// This lovely nesting means we just skip over invalid lines.
+		// There aren't any invalid lines, but can you imagine?
         if let [op, desired] = line?.trim().split(' ').collect::<Vec<_>>().as_slice() {
             if let Some(op) = Move::from_letter(op) {
                 if let Some(desired) = Desired::from_letter(desired) {
