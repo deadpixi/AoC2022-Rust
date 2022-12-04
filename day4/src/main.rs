@@ -3,6 +3,14 @@ use std::fs::File;
 use std::io::{self, BufRead};
 use std::num::ParseIntError;
 
+struct InvalidIntervalError {}
+
+impl From<ParseIntError> for InvalidIntervalError {
+    fn from(_error: ParseIntError) -> Self {
+        Self {}
+    }
+}
+
 #[derive(Clone, Copy)]
 struct Interval {
     start: usize,
@@ -10,14 +18,14 @@ struct Interval {
 }
 
 impl Interval {
-    fn from_string(input: &str) -> Result<Self, ParseIntError> {
+    fn from_string(input: &str) -> Result<Self, InvalidIntervalError> {
         if let [start, end] = input.split('-').collect::<Vec<_>>().as_slice() {
             Ok(Self {
                 start: start.parse::<usize>()?,
                 end: end.parse::<usize>()?,
             })
         } else {
-            panic!("invalid interval!")
+            Err(InvalidIntervalError {})
         }
     }
 
